@@ -4,7 +4,7 @@
 
 ## 1. Experimental Configuration
 
-- **Generator & Runner:** [`synthetic_probe.py`](file:///home/tzufucius/Project/MaxFormer/research_qkta/synthetic_probe.py) (`run_synthetic_suite`), [`synthetic.yaml`](file:///home/tzufucius/Project/MaxFormer/configs/research_qkta/synthetic.yaml)
+- **Generator & Runner:** [`synthetic_probe.py`](research_qkta/synthetic_probe.py) (`run_synthetic_suite`), [`synthetic.yaml`](configs/research_qkta/synthetic.yaml)
 - **Dimensions:** `H = 16`, `W = 16` (`N = 256` tokens), `T = 10` timesteps, `B = 1`, `heads = 1`, `D_head = 8`
 - **Base Seed & Pattern Seeds:** `base_seed = 42`; per-pattern seeds `42..47` (`42 + pattern_idx`)
 - **Gate Parameters:**
@@ -15,10 +15,10 @@
   - `C`: `tau = 2.0, theta0 = 0.5, rho = 0.5, eta = 0.5, kappa = 1.0, b in {0.5, 1.0, 2.0, 3.0, 4.0}`
   - `P`: Same as `C` at `b in {1.0, 2.0, 3.0}`, with spatial permutation of `c` per `(t, b, head)` across `perm_seeds = (101, 202, 303)`
 - **Output Artifacts:**
-  - CSV: [`synthetic_results.csv`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/synthetic/synthetic_results.csv)
-  - JSON: [`synthetic_results.json`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/synthetic/synthetic_results.json)
-  - Traces: [`synthetic_traces.npz`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/synthetic/synthetic_traces.npz)
-  - Summary Figure: [`synthetic_summary.png`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/synthetic/plots/synthetic_summary.png)
+  - CSV: [`synthetic_results.csv`](outputs/qkta/synthetic/synthetic_results.csv)
+  - JSON: [`synthetic_results.json`](outputs/qkta/synthetic/synthetic_results.json)
+  - Traces: [`synthetic_traces.npz`](outputs/qkta/synthetic/synthetic_traces.npz)
+  - Summary Figure: ![`synthetic summary.png`](assets/qkta/synthetic/synthetic_summary.png)
 
 ---
 
@@ -30,7 +30,7 @@ Metric definitions:
 - `A_open_rate = a_open_count / a_total_count = sum(A) / (T * B * heads * H * W)` (`a_total_count = 2560`)
 
 ### 2.1 `low_contrast_persistent_bg` (`seed = 42`, `GT = 0`, `q_sum_mean = 1.7695`, `q_nonzero_fraction = 0.8590`)
-- Plot: [`synthetic_low_contrast_persistent_bg.png`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/synthetic/plots/synthetic_low_contrast_persistent_bg.png)
+- Plot: ![`synthetic low contrast persistent bg.png`](assets/qkta/synthetic/synthetic_low_contrast_persistent_bg.png)
 
 | Config | `TPR_gate` (`num/den`) | `FPR_gate` (`num/den`) | `A_open_rate` (`num/den`) | `c_active_rate` |
 | --- | --- | --- | --- | --- |
@@ -45,7 +45,7 @@ Metric definitions:
 **Observation:** History inhibition (`H`) cuts persistent background opening from `0.8590` (`2199/2560`) down to `0.3770` (`965/2560`) at `b=4.0`. Because random integer channel-count fluctuations occasionally exceed `kappa = 1.0` (`c_active_rate = 0.2340`), `C` admits slightly more background (`+0.0207` to `+0.0328` FPR for `b=2..4`) than `H`.
 
 ### 2.2 `high_contrast_moving_target` (`seed = 43`, `gt_pos = 0.0156`, `q_sum_mean = 0.5078`)
-- Plot: [`synthetic_high_contrast_moving_target.png`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/synthetic/plots/synthetic_high_contrast_moving_target.png)
+- Plot: ![`synthetic high contrast moving target.png`](assets/qkta/synthetic/synthetic_high_contrast_moving_target.png)
 
 | Config | `TPR_gate` (`num/den`) | `FPR_gate` (`num/den`) | `A_open_rate` (`num/den`) | `c_active_rate` |
 | --- | --- | --- | --- | --- |
@@ -57,7 +57,7 @@ Metric definitions:
 | `P_b3.0` (3 seeds mean [min, max]) | `0.9917 [0.9750, 1.0000]` | `0.1712 [0.1702, 0.1718]` | `0.1840` | `0.0828` |
 
 ### 2.3 `high_contrast_static_target` (`seed = 46`, `gt_pos = 0.0156`, `q_sum_mean = 0.4781`)
-- Plot: [`synthetic_high_contrast_static_target.png`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/synthetic/plots/synthetic_high_contrast_static_target.png)
+- Plot: ![`synthetic high contrast static target.png`](assets/qkta/synthetic/synthetic_high_contrast_static_target.png)
 
 | Config | `TPR_gate` (`num/den`) | `FPR_gate` (`num/den`) | `A_open_rate` (`num/den`) | `c_active_rate` |
 | --- | --- | --- | --- | --- |
@@ -72,7 +72,7 @@ Metric definitions:
 **Observation:** This pattern isolates the core mechanism hypothesis: `H` falsely suppresses the stationary target as `R` builds (`TPR` falls to `0.6500` at `b=3.0` and `0.6000` at `b=4.0`), whereas `C` preserves `0.9250` (`+0.2750` vs `H`) and `0.8750` (`+0.2750` vs `H`) with only `+0.0024` to `+0.0032` FPR overhead. Spatial permutation (`P` at `b=3.0`) collapses `TPR_mean` back to `0.6750`, confirming that spatial alignment of `c` drives the protection.
 
 ### 2.4 `sparse_occluded_reappearing_target` (`seed = 47`, `gt_pos = 0.0211`, `q_sum_mean = 0.5242`)
-- Plot: [`synthetic_sparse_occluded_reappearing_target.png`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/synthetic/plots/synthetic_sparse_occluded_reappearing_target.png)
+- Plot: ![`synthetic sparse occluded reappearing target.png`](assets/qkta/synthetic/synthetic_sparse_occluded_reappearing_target.png)
 
 | Config | `TPR_gate` (`num/den`) | `FPR_gate` (`num/den`) | `A_open_rate` (`num/den`) | `c_active_rate` |
 | --- | --- | --- | --- | --- |
@@ -82,7 +82,7 @@ Metric definitions:
 | `P_b3.0` (3 seeds mean [min, max]) | `0.9074 [0.8889, 0.9259]` | `0.1735 [0.1732, 0.1740]` | `0.1889` | `0.0828` |
 
 ### 2.5 Counterexample 1: `high_contrast_flickering_noise` (`seed = 44`, `gt_pos = 0.0625`, `q_sum_mean = 1.0895`)
-- Plot: [`synthetic_high_contrast_flickering_noise.png`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/synthetic/plots/synthetic_high_contrast_flickering_noise.png)
+- Plot: ![`synthetic high contrast flickering noise.png`](assets/qkta/synthetic/synthetic_high_contrast_flickering_noise.png)
 
 | Config | `TPR_gate` (`num/den`) | `FPR_gate` (`num/den`) | `A_open_rate` (`num/den`) | `c_active_rate` |
 | --- | --- | --- | --- | --- |
@@ -96,7 +96,7 @@ Metric definitions:
 **Failure Analysis:** Isolated `1x1` flickering background spikes have low 8-neighbor averages `q_bar` and high `q`, so `q - q_bar >= kappa` sets `c = 1` (`c_active_rate = 0.1492`). Consequently, `C` **falsely protects** background noise (`FPR_C > FPR_H` for all `b >= 1.0`, e.g., `491/2400` vs `481/2400` at `b=2.0`). Moreover, simple fixed-threshold controls `B1_count_k3` (`TPR = 0.9000, FPR = 0.0875`) and `B1_lif_theta1.5` (`TPR = 0.9000, FPR = 0.0879`) achieve both higher target retention and lower background leakage than `C` or `H` on this pattern.
 
 ### 2.6 Counterexample 2: `low_contrast_true_target` (`seed = 45`, `gt_pos = 0.1406`, `q_sum_mean = 1.8766`)
-- Plot: [`synthetic_low_contrast_true_target.png`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/synthetic/plots/synthetic_low_contrast_true_target.png)
+- Plot: ![`synthetic low contrast true target.png`](assets/qkta/synthetic/synthetic_low_contrast_true_target.png)
 
 | Config | `TPR_gate` (`num/den`) | `FPR_gate` (`num/den`) | `A_open_rate` (`num/den`) | `c_active_rate` |
 | --- | --- | --- | --- | --- |

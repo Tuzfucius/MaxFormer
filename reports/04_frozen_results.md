@@ -4,21 +4,21 @@
 
 - **Pre-registered Protocol:** Fixed frozen weights (`model.eval()`, `torch.no_grad()`, `functional.reset_net(model)` before and after every batch), `T = 4`, `seed = 42`.
 - **Blind Calibration Lock:** Candidate `C` hyperparameters (`tau=2.0, theta0=0.5, rho=0.5, eta=0.5, kappa=1.0`) were locked **strictly from `cal_results.csv`** before any `eval` run:
-  - **Track 1** ([`locked_candidates.json`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track1_imagenet/locked_candidates.json), `cal_size = 1,000`): `b in {2.0, 3.0}` for both `stage1` and `all_qkta` (`B0_original` cal acc = `84.00%`; `C_b3.0` peaked at `84.10%` on `all_qkta`). See [`cal_results.csv`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track1_imagenet/cal_results.csv).
-  - **Track 2** ([`locked_candidates.json`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track2_cifar10/locked_candidates.json), `cal_size = 2,000`): `b in {1.0, 3.0}` for both `stage1` and `all_qkta` (`B0_original` cal acc = `91.90%`; `C_b3.0` peaked at `92.45%` on `stage1` and `92.30%` on `all_qkta`). See [`cal_results.csv`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track2_cifar10/cal_results.csv).
+  - **Track 1** ([`locked_candidates.json`](outputs/qkta/track1_imagenet/locked_candidates.json), `cal_size = 1,000`): `b in {2.0, 3.0}` for both `stage1` and `all_qkta` (`B0_original` cal acc = `84.00%`; `C_b3.0` peaked at `84.10%` on `all_qkta`). See [`cal_results.csv`](outputs/qkta/track1_imagenet/cal_results.csv).
+  - **Track 2** ([`locked_candidates.json`](outputs/qkta/track2_cifar10/locked_candidates.json), `cal_size = 2,000`): `b in {1.0, 3.0}` for both `stage1` and `all_qkta` (`B0_original` cal acc = `91.90%`; `C_b3.0` peaked at `92.45%` on `stage1` and `92.30%` on `all_qkta`). See [`cal_results.csv`](outputs/qkta/track2_cifar10/cal_results.csv).
 - **Metric Definitions & Measurement Separation:**
   - `K_post_vs_B0 = K_post_variant / max(K_post_B0_original, 1)`: post-gate K spike ratio relative to `B0_original`. **This is a local spike-count ratio, NOT chip-level energy or mJ.**
   - `K_retention_vs_own_input = K_post_spikes / max(K_pre_spikes, 1)`.
   - Telemetry pass (`QKTATelemetry(enabled=True)`) is strictly separated from the hook-free, CUDA-synchronized timing & peak-VRAM pass (`enabled=False` + `torch.cuda.synchronize`).
 - **Dataset Scope Disclaimer:** Track 1 evaluates a **10-synset ImageNet-1K subset (`Imagenette2-320/val`, `eval_size = 2,925`)** with `0..999` WNID mapping (1000-way logits), **NOT** full 1000-class ImageNet-1K Top-1 accuracy.
-- **GPU Budget Ledger:** [`gpu_budget_log.json`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/gpu_budget_log.json) — **`3.3308` GPU hours** (`11,990.87 s`) across **`164` logged runs** (well below the `7.0 h` soft cap / `8.0 h` hard cap).
+- **GPU Budget Ledger:** [`gpu_budget_log.json`](outputs/qkta/gpu_budget_log.json) — **`3.3308` GPU hours** (`11,990.87 s`) across **`164` logged runs** (well below the `7.0 h` soft cap / `8.0 h` hard cap).
 
 ---
 
 ## 2. Track 1 Independent Eval (`ms_qkformer_10_384`, Imagenette2-320, `n = 2,925`)
 
-- **Sources:** [`frozen_results.csv`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track1_imagenet/frozen_results.csv), [`frozen_results.json`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track1_imagenet/frozen_results.json), [`frozen_metadata.json`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track1_imagenet/frozen_metadata.json)
-- **Plots:** [`accuracy_vs_postK_ratio.png`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track1_imagenet/plots/accuracy_vs_postK_ratio.png) | [`per_step_gate_rate.png`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track1_imagenet/plots/per_step_gate_rate.png) | [`mask_examples.png`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track1_imagenet/plots/mask_examples.png) | [`controls_and_failure_cases.png`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track1_imagenet/plots/controls_and_failure_cases.png)
+- **Sources:** [`frozen_results.csv`](outputs/qkta/track1_imagenet/frozen_results.csv), [`frozen_results.json`](outputs/qkta/track1_imagenet/frozen_results.json), [`frozen_metadata.json`](outputs/qkta/track1_imagenet/frozen_metadata.json)
+- **Plots:** ![`accuracy vs postK ratio.png`](assets/qkta/track1_imagenet/accuracy_vs_postK_ratio.png) | ![`per step gate rate.png`](assets/qkta/track1_imagenet/per_step_gate_rate.png) | ![`mask examples.png`](assets/qkta/track1_imagenet/mask_examples.png) | ![`controls and failure cases.png`](assets/qkta/track1_imagenet/controls_and_failure_cases.png)
 
 ### 2.1 Single-Layer (`stage1`: `stage1.0.attn`)
 
@@ -70,8 +70,8 @@
 
 ## 3. Track 2 Independent Eval (`cifar10-100/ms_qkformer.py`, CIFAR-10, `n = 8,000`)
 
-- **Sources:** [`frozen_results.csv`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track2_cifar10/frozen_results.csv), [`frozen_results.json`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track2_cifar10/frozen_results.json), [`frozen_metadata.json`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track2_cifar10/frozen_metadata.json)
-- **Plots:** [`accuracy_vs_postK_ratio.png`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track2_cifar10/plots/accuracy_vs_postK_ratio.png) | [`per_step_gate_rate.png`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track2_cifar10/plots/per_step_gate_rate.png) | [`mask_examples.png`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track2_cifar10/plots/mask_examples.png) | [`controls_and_failure_cases.png`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track2_cifar10/plots/controls_and_failure_cases.png)
+- **Sources:** [`frozen_results.csv`](outputs/qkta/track2_cifar10/frozen_results.csv), [`frozen_results.json`](outputs/qkta/track2_cifar10/frozen_results.json), [`frozen_metadata.json`](outputs/qkta/track2_cifar10/frozen_metadata.json)
+- **Plots:** ![`accuracy vs postK ratio.png`](assets/qkta/track2_cifar10/accuracy_vs_postK_ratio.png) | ![`per step gate rate.png`](assets/qkta/track2_cifar10/per_step_gate_rate.png) | ![`mask examples.png`](assets/qkta/track2_cifar10/mask_examples.png) | ![`controls and failure cases.png`](assets/qkta/track2_cifar10/controls_and_failure_cases.png)
 
 ### 3.1 Single-Layer (`stage1`: `stage1.0.attn`)
 
@@ -120,7 +120,7 @@
    - On **Track 2**, `B1_count (k=4)` reaches `K_post_vs_B0 = 0.6555` (`91.47%`, `0.00 pp`) on `stage1` and `0.6683` (`91.46%`, `-0.01 pp`) on `all_qkta`, and `B1_count (k=3)` achieves `91.69%` (`+0.21 pp`) at `0.7580×` on `all_qkta`, whereas `H` and `C` remain in `0.888–0.955×`.
 2. **`C` Does Not Consistently Outperform `H` or `P`:**
    - While `C (b=3.0)` on Track 1 `stage1` hits `83.32%` (`+1.23 pp`) vs `H (b=3.0)` `82.56%` (`+0.48 pp`) and `P` `82.42%`, on Track 1 `all_qkta` `H (b=3.0)` (`83.21%`, `0.7398×`) outperforms `C (b=3.0)` (`82.97%`, `0.7664×`), and at `b=2.0` `P` (`82.94%` `stage1`, `83.01%` `all_qkta`) equals or exceeds `C` (`82.53%`, `82.70%`). On Track 2, all differences among `B0`, `H`, `C`, and `P` lie within `[-0.17, +0.13] pp`.
-3. **Mask Snapshots & Failure Cases ([`track1 mask_snapshots.npz`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track1_imagenet/mask_snapshots.npz), [`track2 mask_snapshots.npz`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/track2_cifar10/mask_snapshots.npz)):**
+3. **Mask Snapshots & Failure Cases ([`track1 mask_snapshots.npz`](outputs/qkta/track1_imagenet/mask_snapshots.npz), [`track2 mask_snapshots.npz`](outputs/qkta/track2_cifar10/mask_snapshots.npz)):**
    - Track 1 snapshots (`64` fixed samples, `12` misclassified, e.g., `sample_00008`, `sample_00009`): on `sample_00000` (`pred=571, target=571`), `B0_A = 0.1625`, `H_A = 0.1204`, `C_A = 0.1249`, `P_A = 0.1216`.
    - Track 2 snapshots (`128` fixed samples, `14` misclassified, e.g., `sample_00002` `pred=4, target=5`, `sample_00003` `pred=8, target=9`): `H_A`, `C_A`, and `P_A` differ by `< 0.0005` (`0.0996` vs `0.0998` vs `0.0998` on `sample_00002`).
 4. **Latency Overhead:** `H` and `C` add negligible latency (`7.83–7.85 ms/img` vs `7.81–7.82 ms/img` `B0` on Track 1; `1.47 ms/img` vs `1.36 ms/img` on Track 2), whereas `P` incurs `~0.8–1.5 ms/img` overhead (`8.59–9.74 ms/img` Track 1; `2.05–2.89 ms/img` Track 2) from per-`(t, b, head)` CPU `torch.randperm` generation.

@@ -4,9 +4,9 @@
 
 | Evidence Tier | Source Reports & Artifacts | What It Proves | What It Does NOT Prove |
 | --- | --- | --- | --- |
-| **P1: Math & Unit Tests** | [`01_math_and_tests.md`](file:///home/tzufucius/Project/MaxFormer/reports/01_math_and_tests.md), `tests/test_*.py` (`45/45` passed) | Under `tau=2, theta0=0.5, v_reset=0, u[-1]=0, q in N_0`, `B0` `attn_lif` is mathematically and bit-for-bit identical to memoryless Channel-OR (`1[q >= 1]`); `H`/`C`/`P` recurrences and `3/5/8` boundary norms are implemented correctly. | Does NOT prove that any modified gate improves vision accuracy or sparsity on real models. |
-| **P2: Synthetic Probes** | [`03_synthetic_results.md`](file:///home/tzufucius/Project/MaxFormer/reports/03_synthetic_results.md), [`synthetic_results.csv`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/synthetic/synthetic_results.csv) | `C` protects compact high-contrast static/occluded targets (`+0.2750` TPR over `H` at `b=3,4`), `R` decays during occlusion, and `C` fails predictably on `1x1` flickering noise and large low-contrast targets. | Does NOT prove generalization on real natural images or learned feature maps. |
-| **P3–P4: Dual-Track Frozen Vision** | [`02_checkpoint_and_baseline.md`](file:///home/tzufucius/Project/MaxFormer/reports/02_checkpoint_and_baseline.md), [`04_frozen_results.md`](file:///home/tzufucius/Project/MaxFormer/reports/04_frozen_results.md) | `B0_original == B0_custom` (`0.0` logit diff) on real networks; raising thresholds (`B1_lif`, `B1_count`) cuts `K_post` to `0.22–0.48x` (Track 1) and `0.66–0.76x` (Track 2) with zero accuracy loss. | Does NOT prove `H + C` superiority, post-training SOTA, or hardware mJ energy savings. |
+| **P1: Math & Unit Tests** | [`01_math_and_tests.md`](reports/01_math_and_tests.md), `tests/test_*.py` (`45/45` passed) | Under `tau=2, theta0=0.5, v_reset=0, u[-1]=0, q in N_0`, `B0` `attn_lif` is mathematically and bit-for-bit identical to memoryless Channel-OR (`1[q >= 1]`); `H`/`C`/`P` recurrences and `3/5/8` boundary norms are implemented correctly. | Does NOT prove that any modified gate improves vision accuracy or sparsity on real models. |
+| **P2: Synthetic Probes** | [`03_synthetic_results.md`](reports/03_synthetic_results.md), [`synthetic_results.csv`](outputs/qkta/synthetic/synthetic_results.csv) | `C` protects compact high-contrast static/occluded targets (`+0.2750` TPR over `H` at `b=3,4`), `R` decays during occlusion, and `C` fails predictably on `1x1` flickering noise and large low-contrast targets. | Does NOT prove generalization on real natural images or learned feature maps. |
+| **P3–P4: Dual-Track Frozen Vision** | [`02_checkpoint_and_baseline.md`](reports/02_checkpoint_and_baseline.md), [`04_frozen_results.md`](reports/04_frozen_results.md) | `B0_original == B0_custom` (`0.0` logit diff) on real networks; raising thresholds (`B1_lif`, `B1_count`) cuts `K_post` to `0.22–0.48x` (Track 1) and `0.66–0.76x` (Track 2) with zero accuracy loss. | Does NOT prove `H + C` superiority, post-training SOTA, or hardware mJ energy savings. |
 
 ---
 
@@ -30,7 +30,7 @@
 
 - **Local Spike Budget != Hardware Energy:** `K_post_spikes` / `K_post_vs_B0` measures local post-gate `K` spike counts only; it must **not** be reported as chip-level energy or mJ.
 - **Track 1 Scope:** Imagenette2-320 (`3,925` images, `10` WNIDs mapped to `0..999` logits) is a 10-synset subset, **not** full 1000-class ImageNet-1K Top-1.
-- **Track 2 Training Cap:** `cifar10_ms_qk_t4_baseline.pth` stopped cleanly at Epoch 74 (`91.68%` val acc) under the pre-registered `2.2h` cap (`3.3308h` total GPU across `164` runs in [`gpu_budget_log.json`](file:///home/tzufucius/Project/MaxFormer/outputs/qkta/gpu_budget_log.json)).
+- **Track 2 Training Cap:** `cifar10_ms_qk_t4_baseline.pth` stopped cleanly at Epoch 74 (`91.68%` val acc) under the pre-registered `2.2h` cap (`3.3308h` total GPU across `164` runs in [`gpu_budget_log.json`](outputs/qkta/gpu_budget_log.json)).
 - **Untouched Upstream Event Bug:** `event/ms_qkformer.py` was not modified; upstream `Embed.forward(dual=...)` compatibility issues remain out of scope.
 - **Synthetic vs Real:** `P2` synthetic results characterize gate mechanics only and do not imply real-world visual denoising.
 
