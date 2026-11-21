@@ -1,0 +1,25 @@
+experiment: synthetic_qkta_probe
+seed: 42
+dimensions:
+  T: 10
+  B: 1
+  heads: 1
+  D_head: 8
+  H: 16
+  W: 16
+perm_seeds: [101, 202, 303]
+patterns:
+  - low_contrast_persistent_bg
+  - high_contrast_moving_target
+  - high_contrast_flickering_noise
+  - low_contrast_true_target
+  - high_contrast_static_target
+  - sparse_occluded_reappearing_target
+gate_grid:
+  B0_original: {mode: B0_original, tau: 2.0, theta0: 0.5}
+  B0_custom: {mode: B0_custom, tau: 2.0, theta0: 0.5}
+  B1_lif: {mode: B1_lif, tau: 2.0, theta0: [0.5, 1.0, 1.5, 2.0]}
+  B1_count: {mode: B1_count, k_thresh: [1, 2, 3, 4]}
+  H: {mode: H, tau: 2.0, theta0: 0.5, eta: 0.0, rho: 0.5, b: [0.5, 1.0, 2.0, 3.0, 4.0]}
+  C: {mode: C, tau: 2.0, theta0: 0.5, eta: 0.5, kappa: 1.0, rho: 0.5, b: [0.5, 1.0, 2.0, 3.0, 4.0]}
+  P: {mode: P, tau: 2.0, theta0: 0.5, eta: 0.5, kappa: 1.0, rho: 0.5, b: [1.0, 2.0, 3.0], perm_seeds: [101, 202, 303]}

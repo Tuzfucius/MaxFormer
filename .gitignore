@@ -1,0 +1,11 @@
+data/
+datasets/
+*.pth
+*.pth.tar
+*.ckpt
+outputs/qkta/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/

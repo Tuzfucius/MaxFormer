@@ -1,0 +1,41 @@
+track: cifar10
+model: cifar10_ms_qkformer
+embed_dims: 384
+T: 4
+in_channels: 3
+num_classes: 10
+data_root: data/cifar10
+train_epochs: 100
+max_train_hours: 2.2
+batch_size: 128
+lr: 1.5e-3
+weight_decay: 6.0e-2
+min_lr: 1.0e-5
+seed: 42
+cal_size: 2000
+eval_size: 8000
+single_layer: stage1
+multi_layer: all_qkta
+perm_seeds: [101, 202, 303]
+normalization:
+  mean: [0.4914, 0.4822, 0.4465]
+  std: [0.2470, 0.2435, 0.2616]
+augmentation:
+  scale: [1.0, 1.0]
+  ratio: [1.0, 1.0]
+  horizontal_flip: 0.5
+  vertical_flip: 0.0
+  color_jitter: 0.0
+  auto_augment: rand-m9-n1-mstd0.4-inc1
+  random_erasing: {probability: 0.25, mode: const, count: 1}
+  mixup: 0.5
+  cutmix: 0.5
+  mixup_probability: 1.0
+  mixup_switch_probability: 0.5
+gate_grid:
+  B0_original: {mode: B0_original, tau: 2.0, theta0: 0.5}
+  B0_custom: {mode: B0_custom, tau: 2.0, theta0: 0.5}
+  B1_lif: {mode: B1_lif, tau: 2.0, theta0: [0.5, 1.0, 1.5, 2.0]}
+  B1_count: {mode: B1_count, k_thresh: [1, 2, 3, 4]}
+  H: {mode: H, tau: 2.0, theta0: 0.5, eta: 0.0, rho: 0.5, b: [0.5, 1.0, 2.0, 3.0, 4.0]}
+  C: {mode: C, tau: 2.0, theta0: 0.5, eta: 0.5, kappa: 1.0, rho: 0.5, b: [0.5, 1.0, 2.0, 3.0, 4.0]}
